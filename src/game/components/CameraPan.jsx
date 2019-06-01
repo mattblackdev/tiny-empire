@@ -16,15 +16,15 @@ export default function CameraPan() {
 
     let x = 0
     if (clientX < triggerLeft) {
-      x = THREE.Math.smoothstep(triggerLeft - clientX, 0, triggerX) * -5
+      x = THREE.Math.smoothstep(triggerLeft - clientX, 0, triggerX) * -2
     } else if (clientX > triggerRight) {
-      x = THREE.Math.smoothstep(clientX - triggerRight, 0, triggerX) * 5
+      x = THREE.Math.smoothstep(clientX - triggerRight, 0, triggerX) * 2
     }
     let y = 0
     if (clientY < triggerTop) {
-      y = THREE.Math.smoothstep(triggerTop - clientY, 0, triggerY) * 5
+      y = THREE.Math.smoothstep(triggerTop - clientY, 0, triggerY) * 2
     } else if (clientY > triggerBottom) {
-      y = THREE.Math.smoothstep(clientY - triggerBottom, 0, triggerY) * -5
+      y = THREE.Math.smoothstep(clientY - triggerBottom, 0, triggerY) * -2
     }
 
     pan.current.x = x

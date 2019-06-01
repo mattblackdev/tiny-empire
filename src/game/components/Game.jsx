@@ -3,6 +3,7 @@ import { Canvas } from 'react-three-fiber'
 
 import CameraZoom from './CameraZoom.jsx'
 import CameraPan from './CameraPan.jsx'
+import Trees from './Trees.jsx'
 
 function Cube({ position, color }) {
   return (
@@ -13,23 +14,29 @@ function Cube({ position, color }) {
   )
 }
 
+const rotation = [0.75, 0.75, 0]
+const rotationSide = [0, 0, 0]
 export default function Game() {
   return (
     <Canvas
       orthographic
       camera={{
         zoom: 4,
-      }}>
+        // position: [0, 0, 5],
+      }}
+    >
+      <axesHelper args={[10]} />
       <CameraZoom />
       <CameraPan />
-      <group position={[0, 0, -20]} rotation={[90, 0, 45]}>
-        <Cube position={[0, 0, 0]} color="blue" />
-        <Cube position={[10, 0, 0]} color="green" />
-        <Cube position={[0, -10, 0]} color="red" />
-        <Cube position={[10, -10, 0]} color="yellow" />
+      <group position={[5, -5, -25]} rotation={rotation}>
+        <Cube position={[0, -5, 0]} color="blue" />
+        <Cube position={[10, -5, 0]} color="green" />
+        <Cube position={[0, -5, -10]} color="red" />
+        <Cube position={[10, -5, -10]} color="yellow" />
+        <Trees />
       </group>
-      <directionalLight position={[100, 100, 100]} intensity={2}>
-        <object3D attach="target" position={[90, -10, -100]} />
+      <directionalLight position={[1, 0, 10]} intensity={2}>
+        <object3D attach="target" position={[0, 0, 0]} />
       </directionalLight>
     </Canvas>
   )

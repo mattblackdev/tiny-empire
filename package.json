@@ -22,8 +22,7 @@
   "prettier": {
     "semi": false,
     "trailingComma": "all",
-    "singleQuote": true,
-    "jsxBracketSameLine": true
+    "singleQuote": true
   },
   "browserslist": {
     "production": [
