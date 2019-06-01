@@ -21,8 +21,7 @@ export default function Game() {
     <Canvas
       orthographic
       camera={{
-        zoom: 4,
-        // position: [0, 0, 5],
+        zoom: 10,
       }}
     >
       <axesHelper args={[10]} />
