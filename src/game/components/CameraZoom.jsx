@@ -27,7 +27,7 @@ export default function CameraZoom() {
   useRender(
     ({ camera }) => {
       const zoomValue = zoom
-        .interpolate({ range: [-20, 20], output: [4, 10] })
+        .interpolate({ range: [-20, 20], output: [4, 25] })
         .calc(zoom.value)
       if (zoomValue !== camera.zoom) {
         camera.zoom = zoomValue
