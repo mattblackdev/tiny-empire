@@ -3,6 +3,7 @@ import React from 'react'
 import generateTerrain from '../generation/generateTerrain'
 import { Terrains } from '../definitions'
 import Trees from './Trees.jsx'
+import calcMapXOffset from '../helpers/calcMapXOffset'
 
 function Cube({ position, color }) {
   return (
@@ -16,8 +17,9 @@ function Cube({ position, color }) {
 const rotation = [0.75, 0.75, 0]
 const rotationSide = [0, 0, 0]
 const mapScale = 16
-const size = 10
+const tileSize = 10
 const yPos = -5
+const mapXOffset = calcMapXOffset({ mapScale, tileSize })
 
 export default function World() {
   const map = React.useMemo(() => {
@@ -29,7 +31,7 @@ export default function World() {
         map.push(
           <Cube
             key={x + 1 + z * mapScale}
-            position={[x * size, yPos, z * size]}
+            position={[x * tileSize, yPos, z * tileSize]}
             color={color}
           />,
         )
@@ -40,10 +42,7 @@ export default function World() {
 
   return (
     <React.Fragment>
-      <group
-        position={[5, -5, (mapScale * mapScale * -1) / 2]}
-        rotation={rotation}
-      >
+      <group position={[mapXOffset, 0, mapXOffset]} rotation={rotation}>
         {map}
         <Trees />
       </group>

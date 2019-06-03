@@ -10,7 +10,7 @@ export default function Game() {
     <Canvas
       orthographic
       camera={{
-        zoom: 10,
+        zoom: 2,
       }}
     >
       <axesHelper args={[10]} />
