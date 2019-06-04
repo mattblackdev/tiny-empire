@@ -5,7 +5,7 @@ import _values from 'lodash/values'
 import { Terrains } from '../definitions'
 
 export default function generateTerrain({
-  mapScale,
+  mapScale = 16,
   terrainsDefinition = Terrains,
 }) {
   const simplex = new SimplexNoise(Math.random)
