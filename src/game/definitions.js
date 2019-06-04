@@ -1,3 +1,9 @@
+export const DefaultTile = {
+  entities: [],
+  terrain: null,
+  territory: null,
+}
+
 export const Terrains = {
   ocean: {
     type: 'ocean',
@@ -16,15 +22,11 @@ export const Terrains = {
   },
   mountain: {
     type: 'mountain',
-    color: 'white',
+    color: 'grey',
     threshold: 0.8,
   },
 }
 
-export const TribesMeta = {
-  count: 4,
-  keys: ['kickoo', 'oumaji', 'bardur', 'hoodrick'],
-}
 export const Tribes = {
   kickoo: {
     type: 'kickoo',
@@ -52,9 +54,6 @@ export const Tribes = {
   },
 }
 
-export const TechMeta = {
-  count: 5,
-}
 export const Techs = {
   fishing: {
     type: 'fishing',
