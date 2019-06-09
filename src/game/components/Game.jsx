@@ -12,11 +12,12 @@ export default function Game() {
       camera={{
         zoom: 2,
       }}
+      invalidateFrameloop
     >
       <axesHelper args={[10]} />
       <CameraZoom />
       <CameraPan />
-      <World />
+      <World mapSize={16} />
     </Canvas>
   )
 }

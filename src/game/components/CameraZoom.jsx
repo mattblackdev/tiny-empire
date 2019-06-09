@@ -25,10 +25,11 @@ export default function CameraZoom() {
   }, [handleWheel])
 
   useRender(
-    ({ camera }) => {
+    ({ camera, invalidate }) => {
+      invalidate()
       const zoomValue = zoom
-        .interpolate({ range: [-20, 20], output: [2, 16] })
-        .calc(zoom.value)
+      .interpolate({ range: [-20, 20], output: [2, 16] })
+      .calc(zoom.value)
       if (zoomValue !== camera.zoom) {
         camera.zoom = zoomValue
         camera.updateProjectionMatrix()

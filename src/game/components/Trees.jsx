@@ -1,9 +1,12 @@
 import React from 'react'
 import * as THREE from 'three'
+import useWorldPosition from '../hooks/useWorldPosition'
+// import times from 'lodash/times'
+// import poissonDiscSampler from 'poisson-disc-sampler'
 
 const color = 0x005500
 
-export default function Trees() {
+export default function Trees({ position }) {
   const treesGeometry = React.useMemo(
     () =>
       [[-1, 0, 0], [1, 0, 1]].reduce((groupGeo, treePosition) => {
@@ -31,8 +34,10 @@ export default function Trees() {
     [],
   )
 
+  const worldPosition = useWorldPosition(position)
+
   return (
-    <group position={[0, 0, 0]}>
+    <group position={worldPosition}>
       <mesh geometry={treesGeometry}>
         <meshLambertMaterial
           attach="material"

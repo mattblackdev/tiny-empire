@@ -1,35 +1,29 @@
 import SimplexNoise from 'simplex-noise'
-import _values from 'lodash/values'
-// import poissonDiscSampler from 'poisson-disc-sampler'
+import values from 'lodash/values'
 
 import { Terrains } from '../definitions'
+import map2D from '../../game-engine/helpers/map2D'
 
-export default function generateTerrain({
-  mapScale = 16,
-  terrainsDefinition = Terrains,
-}) {
+export default function generateTerrain(props) {
+  const { map, mapSize, terrainsDefinition = Terrains } = props
+
   const simplex = new SimplexNoise(Math.random)
-  const scale1 = mapScale * 0.875
-  const scale2 = mapScale * 0.375
+  const scale1 = mapSize * 0.875
+  const scale2 = mapSize * 0.375
 
-  const map = []
-  const terrains = _values(terrainsDefinition).sort(
+  const terrains = values(terrainsDefinition).sort(
     (a, b) => b.threshold - a.threshold,
   )
-  console.log(terrains)
 
-  for (let x = 0; x < mapScale; x++) {
-    const column = []
-    for (let y = 0; y < mapScale; y++) {
+  return {
+    ...props,
+    map: map2D(map, (tile, x, y) => {
       const noise =
         (simplex.noise2D(x / scale1, y / scale1) * 0.5 + 0.5) * 0.5 +
         (simplex.noise2D(x / scale2, y / scale2) * 0.5 + 0.5) * 0.5
-      const terrain = terrains.find(t => t.threshold < noise).type
-      // console.log({ noise, terrain })
-      column.push(terrain)
-    }
-    map.push(column)
-  }
+      tile.terrain = terrains.find(t => t.threshold < noise).type
 
-  return map
+      return tile
+    }),
+  }
 }

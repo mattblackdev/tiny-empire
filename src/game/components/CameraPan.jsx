@@ -1,11 +1,12 @@
 import React from 'react'
 import * as THREE from 'three'
-import { useRender } from 'react-three-fiber'
+import { useRender, invalidate } from 'react-three-fiber'
 
 export default function CameraPan() {
   const pan = React.useRef({ x: 0, y: 0 })
 
   const handleMouse = React.useCallback(({ clientX, clientY }) => {
+    invalidate()
     const triggerX = window.innerWidth * 0.2
     const triggerLeft = 0 + triggerX
     const triggerRight = window.innerWidth - triggerX
@@ -45,7 +46,6 @@ export default function CameraPan() {
       const max = 90 - camera.position.x
       const translateX = THREE.Math.clamp(pan.current.x, min, max)
       camera.translateX(translateX)
-      // console.log( )
     }
     if (
       (pan.current.y < 0 && camera.position.y > -90) ||

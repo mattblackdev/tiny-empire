@@ -1,5 +1,8 @@
+import Terrain from './components/Terrain.jsx'
+import Trees from './components/Trees.jsx'
+
 export const DefaultTile = {
-  entities: [],
+  resources: [],
   terrain: null,
   territory: null,
 }
@@ -9,21 +12,25 @@ export const Terrains = {
     type: 'ocean',
     color: 'mediumblue',
     threshold: 0,
+    renderer: Terrain,
   },
   water: {
     type: 'water',
     color: 'blue',
     threshold: 0.3,
+    renderer: Terrain,
   },
   land: {
     type: 'land',
     color: 'forestgreen',
     threshold: 0.5,
+    renderer: Terrain,
   },
   mountain: {
     type: 'mountain',
     color: 'grey',
     threshold: 0.8,
+    renderer: Terrain,
   },
 }
 
@@ -120,7 +127,11 @@ export const Structures = {
 export const Resources = {
   camp: {
     type: 'camp',
-    graphic: '⛺️',
+    renderer: null,
+  },
+  trees: {
+    type: 'trees',
+    renderer: Trees,
   },
 }
 
