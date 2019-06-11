@@ -6,10 +6,10 @@ import useWorldPosition from '../hooks/useWorldPosition'
 
 const color = 0x005500
 
-export default function Trees({ position }) {
-  const treesGeometry = React.useMemo(
-    () =>
-      [[-1, 0, 0], [1, 0, 1]].reduce((groupGeo, treePosition) => {
+export default function Trees({ position, selected }) {
+  const { treesGeometry, highlightMaterial } = React.useMemo(() => {
+    const treesGeometry = [[-1, 0, 0], [1, 0, 1]].reduce(
+      (groupGeo, treePosition) => {
         const treeGeo = new THREE.Geometry()
         const level1 = new THREE.ConeGeometry(0.6, 1, 8)
         level1.faces.forEach(f => f.color.set(color))
@@ -30,9 +30,12 @@ export default function Trees({ position }) {
         treeGeo.translate(...treePosition)
         groupGeo.merge(treeGeo)
         return groupGeo
-      }, new THREE.Geometry()),
-    [],
-  )
+      },
+      new THREE.Geometry(),
+    )
+
+    return { treesGeometry }
+  }, [])
 
   const worldPosition = useWorldPosition(position)
 
@@ -43,6 +46,23 @@ export default function Trees({ position }) {
           attach="material"
           vertexColors={THREE.VertexColors}
         />
+        {selected && (
+          <meshLambertMaterial
+            attach="material"
+            color="blue"
+            side={THREE.BackSide}
+            onBeforeCompile={shader => {
+              const token = '#include <begin_vertex>'
+              const customTransform = `
+        vec3 transformed = position + objectNormal*0.02;
+    `
+              shader.vertexShader = shader.vertexShader.replace(
+                token,
+                customTransform,
+              )
+            }}
+          />
+        )}
       </mesh>
     </group>
   )

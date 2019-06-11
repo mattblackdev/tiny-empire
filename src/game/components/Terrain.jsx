@@ -2,28 +2,38 @@ import React from 'react'
 import { Terrains } from '../definitions'
 import { TILE_SIZE } from '../constants'
 import useWorldPosition from '../hooks/useWorldPosition'
+import TileSelector from './TileSelector'
 
-export default function Terrain({ id, position, terrain, dispatch }) {
-  const worldPosition = useWorldPosition(position, -5)
+export default function Terrain({
+  id,
+  position,
+  terrain,
+  tileSelector,
+  dispatch,
+}) {
+  const worldPosition = useWorldPosition(position)
   const color = Terrains[terrain].color
 
   return (
-    <mesh
-      position={worldPosition}
-      onPointerUp={e => {
-        // Only the mesh closest to the camera will be processed
-        e.stopPropagation()
-        // You may optionally capture the target
-        // e.target.setPointerCapture(e.pointerId)
-        console.log(`pointer up! ${position.x}, ${position.y}`)
-        dispatch({
-          type: 'hello',
-          position,
-        })
-      }}
-    >
-      <boxGeometry attach="geometry" args={[TILE_SIZE, TILE_SIZE, TILE_SIZE]} />
-      <meshStandardMaterial attach="material" color={color} />
-    </mesh>
+    <group position={worldPosition}>
+      <mesh
+        position={[0, -5, 0]}
+        onPointerUp={e => {
+          e.stopPropagation()
+          dispatch({
+            type: 'Pointer Up On Entity',
+            terrainEntityId: id,
+            position,
+          })
+        }}
+      >
+        <boxGeometry
+          attach="geometry"
+          args={[TILE_SIZE, TILE_SIZE, TILE_SIZE]}
+        />
+        <meshStandardMaterial attach="material" color={color} />
+      </mesh>
+      <TileSelector {...tileSelector} />
+    </group>
   )
 }

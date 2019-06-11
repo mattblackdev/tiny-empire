@@ -18,6 +18,8 @@ const generateEntities = props => {
       id: terrainEntityId,
       position,
       terrain: tile.terrain,
+      tileSelector: { selected: false, highlighted: false },
+      actionIndicator: { visible: false, type: 'move' },
       renderer: Terrains[tile.terrain].renderer,
     }
 
