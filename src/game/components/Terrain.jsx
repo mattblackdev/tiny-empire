@@ -4,6 +4,8 @@ import { TILE_SIZE } from '../constants'
 import useWorldPosition from '../hooks/useWorldPosition'
 import TileSelector from './TileSelector'
 
+const yPos = TILE_SIZE / -2
+
 export default function Terrain({
   id,
   position,
@@ -13,11 +15,10 @@ export default function Terrain({
 }) {
   const worldPosition = useWorldPosition(position)
   const color = Terrains[terrain].color
-
   return (
     <group position={worldPosition}>
       <mesh
-        position={[0, -5, 0]}
+        position={[0, yPos, 0]}
         onPointerUp={e => {
           e.stopPropagation()
           dispatch({

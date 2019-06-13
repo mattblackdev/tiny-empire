@@ -7,7 +7,7 @@ import useWorldPosition from '../hooks/useWorldPosition'
 const color = 0x005500
 
 export default function Trees({ position, selected }) {
-  const { treesGeometry, highlightMaterial } = React.useMemo(() => {
+  const { treesGeometry } = React.useMemo(() => {
     const treesGeometry = [[-1, 0, 0], [1, 0, 1]].reduce(
       (groupGeo, treePosition) => {
         const treeGeo = new THREE.Geometry()

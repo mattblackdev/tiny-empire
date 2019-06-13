@@ -1,6 +1,7 @@
 import React from 'react'
 import { useImmerReducer } from 'use-immer'
-import { Canvas, useRender } from 'react-three-fiber'
+import { Canvas } from 'react-three-fiber'
+import pull from 'lodash/pull'
 
 import generateWorld from '../generation/generateWorld'
 import CameraZoom from './CameraZoom.jsx'
@@ -10,13 +11,14 @@ import World from './World.jsx'
 const initialState = {
   entities: {},
   selection: null,
-  invalidateFrameloop: true,
+  frameloopRequests: [],
 }
 
 const initializer = props => initialState =>
   generateWorld({ ...initialState, ...props })
 
 function reducer(draft, action) {
+  // console.log(action)
   switch (action.type) {
     case 'Pointer Up On Entity': {
       const unitOnTile = Object.values(draft.entities).find(
@@ -34,7 +36,7 @@ function reducer(draft, action) {
         !!unitOnTile &&
         (selectionIsNew || selectionMoved || !Boolean(draft.selection.unit))
 
-      console.log({ selectionIsNew, selectionMoved, selectingUnit })
+      // console.log({ selectionIsNew, selectionMoved, selectingUnit })
       if (selectionMoved) {
         draft.entities[
           draft.selection.terrainEntityId
@@ -50,8 +52,12 @@ function reducer(draft, action) {
       }
       return
     }
-    case 'Invalidate Frameloop': {
-      draft.invalidateFrameloop = action.invalidateFrameloop
+    case 'Request frameloop': {
+      draft.frameloopRequests.push(action.key)
+      return
+    }
+    case 'Remove frameloop request': {
+      pull(draft.frameloopRequests, action.key)
       return
     }
     default: {
@@ -62,11 +68,20 @@ function reducer(draft, action) {
 
 const GameStateContext = React.createContext()
 
-function CheckRender() {
-  useRender(() => {
-    console.log('hi')
-  })
-  return null
+function ShowRender({ invalidateFrameloop }) {
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        top: 40,
+        left: 40,
+        width: 20,
+        height: 20,
+        borderRadius: 10,
+        backgroundColor: invalidateFrameloop ? 'transparent' : 'red',
+      }}
+    />
+  )
 }
 
 export default function Game(props) {
@@ -75,10 +90,9 @@ export default function Game(props) {
     initialState,
     initializer(props),
   )
-  console.log(state.selection)
 
   const { entities, mapSize } = state
-
+  const invalidateFrameloop = state.frameloopRequests.length === 0
   return (
     <GameStateContext.Provider value={{ state, dispatch }}>
       <Canvas
@@ -86,14 +100,11 @@ export default function Game(props) {
         camera={{
           zoom: 2,
         }}
-        invalidateFrameloop={state.invalidateFrameloop}
+        invalidateFrameloop={invalidateFrameloop}
       >
         <axesHelper args={[10]} />
         <CameraZoom />
-        <CameraPan
-          dispatch={dispatch}
-          frameloopIsInvalidated={state.invalidateFrameloop}
-        />
+        <CameraPan dispatch={dispatch} />
         <World mapSize={mapSize}>
           {Object.keys(entities)
             .filter(key => entities[key].renderer)
@@ -104,8 +115,8 @@ export default function Game(props) {
               )
             })}
         </World>
-        <CheckRender />
       </Canvas>
+      <ShowRender invalidateFrameloop={invalidateFrameloop} />
     </GameStateContext.Provider>
   )
 }

@@ -18,9 +18,8 @@ export default function World(props) {
       <group position={[mapXOffset, 0, mapXOffset]} rotation={rotation}>
         {children}
       </group>
-      <directionalLight position={[1, 0, 10]} intensity={2}>
-        <object3D attach="target" position={[0, 0, 0]} />
-      </directionalLight>
+      <ambientLight color={0x404040} intensity={1.2} />
+      <hemisphereLight skyColor={0xffffbb} groundColor={0x080820} />
     </group>
   )
 }
