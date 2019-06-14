@@ -1,9 +1,13 @@
 import React from 'react'
-import { useRender } from 'react-three-fiber'
+import { useRender, useThree } from 'react-three-fiber'
 import { useSpring } from 'react-spring/three'
 
 export default function CameraZoom() {
-  const [{ zoom }, set] = useSpring(() => ({ zoom: -20 }))
+  const { canvas, invalidate } = useThree()
+  const [{ zoom }, set] = useSpring(() => ({
+    zoom: -10,
+    onFrame: () => invalidate(),
+  }))
 
   const handleWheel = React.useCallback(
     ({ deltaY }) => {
@@ -20,23 +24,22 @@ export default function CameraZoom() {
   )
 
   React.useEffect(() => {
-    window.addEventListener('wheel', handleWheel)
-    return () => window.removeEventListener('wheel', handleWheel)
-  }, [handleWheel])
+    canvas.addEventListener('wheel', handleWheel)
+    return () => canvas.removeEventListener('wheel', handleWheel)
+  }, [handleWheel, canvas])
 
   useRender(
-    ({ camera, invalidate }) => {
-      invalidate()
+    ({ camera }) => {
       const zoomValue = zoom
-      .interpolate({ range: [-20, 20], output: [2, 16] })
-      .calc(zoom.value)
+        .interpolate({ range: [-20, 20], output: [2, 16] })
+        .calc(zoom.value)
       if (zoomValue !== camera.zoom) {
         camera.zoom = zoomValue
         camera.updateProjectionMatrix()
       }
     },
     false,
-    [zoom.value],
+    [zoom],
   )
 
   return null

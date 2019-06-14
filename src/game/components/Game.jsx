@@ -1,6 +1,6 @@
 import React from 'react'
 import { useImmerReducer } from 'use-immer'
-import { Canvas } from 'react-three-fiber'
+import { Canvas, useRender } from 'react-three-fiber'
 import pull from 'lodash/pull'
 
 import generateWorld from '../generation/generateWorld'
@@ -52,14 +52,6 @@ function reducer(draft, action) {
       }
       return
     }
-    case 'Request frameloop': {
-      draft.frameloopRequests.push(action.key)
-      return
-    }
-    case 'Remove frameloop request': {
-      pull(draft.frameloopRequests, action.key)
-      return
-    }
     default: {
       return
     }
@@ -68,20 +60,11 @@ function reducer(draft, action) {
 
 const GameStateContext = React.createContext()
 
-function ShowRender({ invalidateFrameloop }) {
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        top: 40,
-        left: 40,
-        width: 20,
-        height: 20,
-        borderRadius: 10,
-        backgroundColor: invalidateFrameloop ? 'transparent' : 'red',
-      }}
-    />
-  )
+function LogRender() {
+  useRender(() => {
+    console.log('rendering')
+  })
+  return null
 }
 
 export default function Game(props) {
@@ -92,19 +75,11 @@ export default function Game(props) {
   )
 
   const { entities, mapSize } = state
-  const invalidateFrameloop = state.frameloopRequests.length === 0
   return (
     <GameStateContext.Provider value={{ state, dispatch }}>
-      <Canvas
-        orthographic
-        camera={{
-          zoom: 2,
-        }}
-        invalidateFrameloop={invalidateFrameloop}
-      >
-        <axesHelper args={[10]} />
+      <Canvas orthographic invalidateFrameloop>
         <CameraZoom />
-        <CameraPan dispatch={dispatch} />
+        <CameraPan />
         <World mapSize={mapSize}>
           {Object.keys(entities)
             .filter(key => entities[key].renderer)
@@ -115,8 +90,9 @@ export default function Game(props) {
               )
             })}
         </World>
+        <axesHelper args={[10]} />
+        {/* <LogRender /> */}
       </Canvas>
-      <ShowRender invalidateFrameloop={invalidateFrameloop} />
     </GameStateContext.Provider>
   )
 }

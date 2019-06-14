@@ -32,7 +32,7 @@ export default function Terrain({
           attach="geometry"
           args={[TILE_SIZE, TILE_SIZE, TILE_SIZE]}
         />
-        <meshStandardMaterial attach="material" color={color} />
+        <meshLambertMaterial attach="material" color={color} />
       </mesh>
       <TileSelector {...tileSelector} />
     </group>
