@@ -8,6 +8,7 @@ export default function generateDistributedResource({
   minimumPoints = 4,
   maximumPoints = 8,
   edgeOffset = 0,
+  removeExistingResources = false,
 }) {
   return function(props) {
     const { map, mapSize } = props
@@ -56,7 +57,11 @@ export default function generateDistributedResource({
     }
 
     bestPoints.forEach(({ x, y }) => {
-      map[x][y].resources.push(resourceType)
+      if (removeExistingResources) {
+        map[x][y].resources = [resourceType]
+      } else {
+        map[x][y].resources.push(resourceType)
+      }
     })
 
     return props

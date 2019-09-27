@@ -36,7 +36,6 @@ function reducer(draft, action) {
         !!unitOnTile &&
         (selectionIsNew || selectionMoved || !Boolean(draft.selection.unit))
 
-      // console.log({ selectionIsNew, selectionMoved, selectingUnit })
       if (selectionMoved) {
         draft.entities[
           draft.selection.terrainEntityId

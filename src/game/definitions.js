@@ -1,5 +1,6 @@
 import Terrain from './components/Terrain.jsx'
 import Trees from './components/Trees.jsx'
+import Camp from './components/Camp.jsx'
 
 export const DefaultTile = {
   resources: [],
@@ -127,7 +128,7 @@ export const Structures = {
 export const Resources = {
   camp: {
     type: 'camp',
-    renderer: null,
+    renderer: Camp,
   },
   trees: {
     type: 'trees',

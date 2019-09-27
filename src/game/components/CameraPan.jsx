@@ -28,7 +28,11 @@ function getLastDragMovement(e) {
   }
 }
 
-function getExtrapolatedPointerPosition(e, lastMovement, camera) {
+function getExtrapolatedPointerPosition(
+  e,
+  lastMovement = { x: 0, y: 0 },
+  camera,
+) {
   return new Vector3(
     ((e.clientX + lastMovement.x * 5) / window.innerWidth) * 2 - 1,
     -((e.clientY + lastMovement.y * 5) / window.innerHeight) * 2 + 1,
@@ -49,6 +53,7 @@ export default function CameraPan() {
   const cameraStartPosition = React.useRef(getCameraPosition(camera))
   const dragStartPosition = React.useRef(null)
   const lastDragMovement = React.useRef(null)
+  const dragStartTimeout = React.useRef(null)
 
   const [{ x, y }, setCameraDesitinationPosition] = useSpring(() => ({
     x: 0,
@@ -63,7 +68,9 @@ export default function CameraPan() {
       if (pointerState.current === PointerStates.UP) {
         cameraStartPosition.current = getCameraPosition(camera)
         dragStartPosition.current = getPointerPosition(e, camera)
-        pointerState.current = PointerStates.DOWN
+        dragStartTimeout.current = setTimeout(() => {
+          pointerState.current = PointerStates.DOWN
+        }, 100)
       }
     },
     [camera],
@@ -110,6 +117,10 @@ export default function CameraPan() {
           ),
         )
         e.stopPropagation()
+      } else {
+        if (dragStartTimeout.current) {
+          clearTimeout(dragStartTimeout.current)
+        }
       }
       pointerState.current = PointerStates.UP
     },
