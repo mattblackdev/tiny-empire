@@ -3,7 +3,7 @@ import { useRender, useThree } from 'react-three-fiber'
 import { useSpring } from 'react-spring/three'
 
 export default function CameraZoom() {
-  const { canvas, invalidate } = useThree()
+  const { invalidate } = useThree()
   const [{ zoom }, set] = useSpring(() => ({
     zoom: -10,
     onFrame: () => invalidate(),
@@ -24,9 +24,9 @@ export default function CameraZoom() {
   )
 
   React.useEffect(() => {
-    canvas.addEventListener('wheel', handleWheel)
-    return () => canvas.removeEventListener('wheel', handleWheel)
-  }, [handleWheel, canvas])
+    window.addEventListener('wheel', handleWheel)
+    return () => window.removeEventListener('wheel', handleWheel)
+  }, [handleWheel])
 
   useRender(
     ({ camera }) => {

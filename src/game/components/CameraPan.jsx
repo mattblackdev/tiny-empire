@@ -48,7 +48,7 @@ function getCameraDestinationPosition(sourceStart, sourceEnd, targetStart) {
 }
 
 export default function CameraPan() {
-  const { camera, canvas, invalidate } = useThree()
+  const { camera, invalidate } = useThree()
   const pointerState = React.useRef(PointerStates.UP)
   const cameraStartPosition = React.useRef(getCameraPosition(camera))
   const dragStartPosition = React.useRef(null)
@@ -128,15 +128,15 @@ export default function CameraPan() {
   )
 
   React.useEffect(() => {
-    canvas.addEventListener('pointerdown', handleDown)
-    canvas.addEventListener('pointermove', handleMove)
-    canvas.addEventListener('pointerup', handleUp)
+    window.addEventListener('pointerdown', handleDown)
+    window.addEventListener('pointermove', handleMove)
+    window.addEventListener('pointerup', handleUp)
     return () => {
-      canvas.removeEventListener('pointerdown', handleDown)
-      canvas.removeEventListener('pointermove', handleMove)
-      canvas.removeEventListener('pointerup', handleUp)
+      window.removeEventListener('pointerdown', handleDown)
+      window.removeEventListener('pointermove', handleMove)
+      window.removeEventListener('pointerup', handleUp)
     }
-  }, [canvas, handleDown, handleMove, handleUp])
+  }, [handleDown, handleMove, handleUp])
 
   useRender(
     ({ camera }) => {
