@@ -7,7 +7,7 @@
     "@types/node": "^12.12.8",
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.9.4",
-    "immer": "^5.0.0",
+    "immer": "^8.0.1",
     "lodash": "^4.17.15",
     "poisson-disc-sampler": "^1.1.0",
     "react": "^16.12.0",
